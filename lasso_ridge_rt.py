@@ -8,9 +8,17 @@ from sklearn.linear_model import Lasso
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import requests  # For downloading the dataset programmatically
+import io       # To handle in-memory data
 
-# Load dataset
-data = pd.read_csv('/content/Project1WeatherDataset.csv')
+# Download the dataset from GitHub
+url = "https://raw.githubusercontent.com/JOSHITHA6/Weather_Forecast/main/Project1WeatherDataset.csv"
+response = requests.get(url)
+if response.status_code == 200:
+    data = pd.read_csv(io.StringIO(response.text))
+else:
+    print("Error: Unable to fetch the dataset. Please check the URL.")
+    exit()
 
 # Inspecting the data
 print(data.head())
@@ -83,5 +91,3 @@ plt.ylabel('Predicted')
 
 plt.tight_layout()
 plt.show()
-
-
